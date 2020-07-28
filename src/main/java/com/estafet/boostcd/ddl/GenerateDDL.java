@@ -21,25 +21,11 @@ import org.xml.sax.SAXException;
 public class GenerateDDL {
 
 	public static void main(String[] args) throws IOException {
-		String microservice = getMicroserviceName();
-		File create = new File("ddl", "create-" + microservice + "-db.ddl");
-		File drop = new File("ddl", "drop-" + microservice + "-db.ddl");
+		File create = new File("src/ddl", "create-db.ddl");
+		File drop = new File("src/ddl", "drop-db.ddl");
 		new ClassPathXmlApplicationContext("generate-ddl-application-context.xml").close();
 		appendSemicolon(create);
 		appendSemicolon(drop);
-	}
-
-	private static String getMicroserviceName() {
-		try {
-			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-			DocumentBuilder dBuilder;
-			dBuilder = dbFactory.newDocumentBuilder();
-			Document doc = dBuilder.parse(new File("pom.xml"));
-			doc.getDocumentElement().normalize();
-			return doc.getElementsByTagName("microservice").item(0).getTextContent();
-		} catch (DOMException | ParserConfigurationException | SAXException | IOException e) {
-			throw new RuntimeException(e);
-		}
 	}
 
 	private static void appendSemicolon(File ddl) throws IOException {
